@@ -108,6 +108,36 @@ is
 
    -------------------------------------------------------------------------
 
+   --  Returns True if indirect branch restricted speculation (IBRS) and the
+   --  indirect branch predictor barrier (IBPB) are supported, see Intel
+   --  Speculative Execution Side Channel Mitigations section 2.4.1.
+   function Has_IBRS_BPB return Boolean
+   with
+      Volatile_Function,
+      Global => (Input => X86_64.State)
+   is
+      Unused_EAX, Unused_EBX, Unused_ECX, EDX : SK.Word32;
+   begin
+      Unused_EAX := 7;
+      Unused_ECX := 0;
+
+      pragma Warnings
+        (GNATprove, Off, "unused assignment to ""Unused_E*X""",
+         Reason => "Only parts of the CPUID result is needed");
+      CPU.CPUID
+        (EAX => Unused_EAX,
+         EBX => Unused_EBX,
+         ECX => Unused_ECX,
+         EDX => EDX);
+      pragma Warnings (GNATprove, On, "unused assignment to ""Unused_E*X""");
+
+      return Bitops.Bit_Test
+        (Value => Word64 (EDX),
+         Pos   => Constants.CPUID_FEATURE_IBRS_IBPB);
+   end Has_IBRS_BPB;
+
+   -------------------------------------------------------------------------
+
    --  Returns True if local APIC is present and supports x2APIC mode, see
    --  Intel SDM 3A, chapters 10.4.2 and 10.12.1.
    function Has_X2_Apic return Boolean
