@@ -1,0 +1,4 @@
+server.document-root = "__SERVERROOT__/http"
+server.port = 8000
+server.errorlog = "__SERVERROOT__/lighttpd.error"
+server.pid-file = "__SERVERROOT__/.server"

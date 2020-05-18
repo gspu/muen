@@ -1,2 +1,3 @@
 .server
-http.log
+http
+lighttpd.*

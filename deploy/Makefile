@@ -1,36 +1,44 @@
-PACK_DIR = $(CURDIR)/../pack/obj
-HTTP_LOG = $(CURDIR)/http.log
+IMG_NAME = muen.iso
+IMG_SRC  = $(CURDIR)/../emulate/$(IMG_NAME)
+HTTP_DIR = $(CURDIR)/http
 
 TARGET_PWR_MECH ?= amt
 
 TARGET_START    ?= target_start_$(TARGET_PWR_MECH)
 TARGET_SHUTDOWN ?= target_shutdown_$(TARGET_PWR_MECH)
 
-PING_CMD    ?= ping -c 3
-DEPLOY_PORT ?= 8000
-TARGET_IP   ?= 192.168.254.2
+LIGHTTPD_CMD ?= /usr/sbin/lighttpd
+PING_CMD     ?= ping -c 3
+DEPLOY_PORT  ?= 8000
+TARGET_IP    ?= 192.168.254.2
 
 TARGET_EGNAME ?= eg1
 TARGET_EPCIP  ?= 192.168.254.254
 
-HTTP_STATE = `cat $(HTTP_LOG)`
-
 all: deploy
 
-deploy: $(PACK_DIR)/muen.img .server $(TARGET_START)
+deploy: .server $(HTTP_DIR)/boot.cfg $(HTTP_DIR)/$(IMG_NAME) $(TARGET_START)
 
 shutdown: $(TARGET_SHUTDOWN)
 
-.server:
-	(cd $(PACK_DIR) && python -m SimpleHTTPServer $(DEPLOY_PORT) >$(HTTP_LOG) 2>&1 & echo "$$!" > $@)
-	@sleep 1
-	@if [ "$(HTTP_STATE)" != "" ]; then                                   \
-		echo HTTP start failed, check '$(HTTP_LOG)'; rm .server | exit 1; \
-	fi
+$(HTTP_DIR):
+	mkdir -p $(HTTP_DIR)
+
+$(HTTP_DIR)/$(IMG_NAME): $(IMG_SRC) | $(HTTP_DIR)
+	cp $< $@
+$(HTTP_DIR)/boot.cfg: boot.cfg | $(HTTP_DIR)
+	cp $< $@
+
+lighttpd.conf: lighttpd_conf.src
+	sed -r 's#__SERVERROOT__#$(CURDIR)#g' $< > $@
+
+.server: lighttpd.conf
+	$(LIGHTTPD_CMD) -f lighttpd.conf
 
 clean:
 	@kill `cat .server 2>/dev/null` 2>/dev/null || true
-	@rm -f .server $(HTTP_LOG)
+	@rm -f .server lighttpd.*
+	@rm -rf $(HTTP_DIR)
 
 target_start_amt:
 	$(PING_CMD) $(TARGET_IP) >/dev/null
