@@ -38,14 +38,17 @@ is
    subtype TSC_Tick_Rate_Hz_Type is
      Interfaces.Unsigned_64 range 1000000 .. 100000000000;
 
+   Time_Info_Size : constant := 24;
+
    type Time_Info_Type is record
       --  Time when TSC was zero
-      TSC_Time_Base      : Timestamp_Type;
+      TSC_Time_Base      : Timestamp_Type'Base;
       --  TSC Ticks in Hz
-      TSC_Tick_Rate_Hz   : TSC_Tick_Rate_Hz_Type;
+      TSC_Tick_Rate_Hz   : TSC_Tick_Rate_Hz_Type'Base;
       --  Timezone offset in microseconds
-      Timezone_Microsecs : Timezone_Type;
-   end record;
+      Timezone_Microsecs : Timezone_Type'Base;
+   end record
+   with Size => Time_Info_Size * 8;
 
    --  Update time info validity flag.
    procedure Update_Validity
@@ -78,6 +81,7 @@ private
       TSC_Tick_Rate_Hz   at  8 range 0 .. 63;
       Timezone_Microsecs at 16 range 0 .. 63;
    end record;
+   for Time_Info_Type'Object_Size use Time_Info_Size * 8;
 
    procedure Get_Current_Time
      (TI             :     Time_Info_Type;

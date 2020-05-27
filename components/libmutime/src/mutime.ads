@@ -32,7 +32,11 @@ package Mutime
 is
 
    --  Time in microseconds since 1970-01-01T00:00:00+00:00.
-   type Timestamp_Type is private;
+   --  Range of allowed timestamps spanning the time in microseconds from
+   --  1970-01-01T00:00:00+00:00 to 9999-12-31T23:59:59+00:00.
+   type Timestamp_Type is range 0 .. 253402300799000000
+     with
+       Size => 64;
 
    Epoch_Timestamp : constant Timestamp_Type;
 
@@ -90,12 +94,6 @@ is
       return Interfaces.Unsigned_64;
 
 private
-
-   --  Range of allowed timestamps spanning the time in microseconds from
-   --  1970-01-01T00:00:00+00:00 to 9999-12-31T23:59:59+00:00.
-   type Timestamp_Type is range 0 .. 253402300799000000
-     with
-       Size => 64;
 
    Epoch_Timestamp : constant Timestamp_Type := 0;
 
