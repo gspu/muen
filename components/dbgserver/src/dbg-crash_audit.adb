@@ -64,10 +64,10 @@ is
      (Ctx : SK.Crash_Audit_Types.Init_Context_Type);
 
    --  Append new line to output of all debug interfaces.
-   procedure New_Line;
+   procedure Append_New_Line;
 
    package D is new SK.Dumper
-     (New_Line   => New_Line,
+     (New_Line   => Append_New_Line,
       Put_Line   => Append_Line,
       Put_String => Append_String);
 
@@ -208,6 +208,16 @@ is
 
    -------------------------------------------------------------------------
 
+   procedure Append_New_Line
+   is
+   begin
+      for Iface of Channels.Instance loop
+         Byte_Queue.Format.Append_New_Line (Queue => Iface.Output);
+      end loop;
+   end Append_New_Line;
+
+   -------------------------------------------------------------------------
+
    procedure Append_String (Item : String)
    is
    begin
@@ -239,16 +249,6 @@ is
 
    -------------------------------------------------------------------------
 
-   procedure New_Line
-   is
-   begin
-      for Iface of Channels.Instance loop
-         Byte_Queue.Format.Append_New_Line (Queue => Iface.Output);
-      end loop;
-   end New_Line;
-
-   -------------------------------------------------------------------------
-
    procedure Process
    is
       package IFA renames Interfaces;
@@ -258,7 +258,7 @@ is
       if Instance.Header.Version_Magic = SK.Crash_Audit_Types.Crash_Magic
         and then Instance.Header.Boot_Count = Instance.Header.Generation
       then
-         New_Line;
+         Append_New_Line;
          Append_Line
            (Item => "[Active CRASH AUDIT detected @ "
             & Img (IFA.Unsigned_64'(Cspecs.Crash_Audit_Address)) & "]");
@@ -276,7 +276,7 @@ is
          end;
 
          for I in 1 .. Instance.Header.Dump_Count loop
-            New_Line;
+            Append_New_Line;
             Append_Line
               (Item => "* Record " & Img (IFA.Unsigned_8 (I))
                & ", APIC ID " & Img (Instance.Data (I).APIC_ID)
