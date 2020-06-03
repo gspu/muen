@@ -23,6 +23,6 @@ pragma Elaborate (SK.Console);
 
 --  Kernel debug console.
 package SK.KC is new SK.Console
-  (Initialize      => Console_UART.Init,
+  (Init_Console    => Console_UART.Init,
    Output_New_Line => Console_UART.New_Line,
    Output_Char     => Console_UART.Put_Char);

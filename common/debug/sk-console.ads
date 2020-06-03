@@ -19,7 +19,7 @@
 generic
 
    --  Implementation of the console initialization operation.
-   with procedure Initialize;
+   with procedure Init_Console;
 
    --  Implementation of the new line output operation.
    with procedure Output_New_Line;

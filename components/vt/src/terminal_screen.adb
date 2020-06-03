@@ -46,7 +46,7 @@ is
       Cursor_Offset => Cursor_Offset);
 
    package Text_IO is new SK.Console
-     (Initialize      => VGA.Init,
+     (Init_Console    => VGA.Init,
       Output_New_Line => VGA.New_Line,
       Output_Char     => VGA.Put_Char);
 

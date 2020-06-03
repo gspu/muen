@@ -23,6 +23,6 @@ pragma Elaborate (SK.Console);
 
 --  Kernel VGA debug console.
 package SK.KC is new SK.Console
-  (Initialize      => SK.Legacy_VGA.VGA.Init,
+  (Init_Console    => SK.Legacy_VGA.VGA.Init,
    Output_New_Line => SK.Legacy_VGA.VGA.New_Line,
    Output_Char     => SK.Legacy_VGA.VGA.Put_Char);

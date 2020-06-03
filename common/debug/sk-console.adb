@@ -24,7 +24,7 @@ is
    procedure Init
    is
    begin
-      Initialize;
+      Init_Console;
    end Init;
 
    -------------------------------------------------------------------------
