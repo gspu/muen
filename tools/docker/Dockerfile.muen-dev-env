@@ -26,9 +26,9 @@ ARG packages="acpica-tools amtterm autoconf automake autopoint bc binutils-dev \
 bison bzip2 ca-certificates ccache cpio curl file flex git-core gnupg gnuplot \
 inotify-tools kmod lcov libc6-dev libcurl4-gnutls-dev libelf-dev \
 libfreetype6-dev libiberty-dev libncurses-dev libseccomp-dev libssl-dev \
-libxml2-utils make mtools openssh-client patch picocom pkg-config python \
-python-lxml python-colorlog python-pip python-setuptools qemu-system-x86 rsync \
-screen tidy unzip vim wget xfonts-unifont xorriso xsltproc xz-utils zlib1g-dev"
+libxml2-utils lighttpd make mtools openssh-client patch picocom pkg-config \
+python python-lxml python-colorlog python-pip python-setuptools qemu-system-x86 \
+rsync screen tidy unzip vim wget xfonts-unifont xorriso xsltproc xz-utils zlib1g-dev"
 
 # Install dependencies
 RUN apt-get update && \
