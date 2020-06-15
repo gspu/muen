@@ -39,11 +39,17 @@ is
 
    package Cspecs renames Libmudebuglog_Component.Channels;
 
+   pragma Warnings (Off);  --  Only emitted by recent GNATprove versions.
    Message_Channel : Stream.Channel_Type
    with
       Address => System'To_Address (Cspecs.Debuglog_Address),
       Size    => Cspecs.Debuglog_Size * 8,
       Async_Readers;
+   pragma Annotate
+     (GNATprove, Intentional,
+      "object with constraints on bit representation is unsuitable for alias*",
+      "Size of channel (types) cannot be set in generic (see [T611-019]).");
+   pragma Warnings (On);
 
    Message_Buffer : Types.Data_Type;
    Message_Index  : Types.Message_Index;
