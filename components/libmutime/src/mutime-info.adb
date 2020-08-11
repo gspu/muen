@@ -32,7 +32,7 @@ with Libmutime_Component.Channels;
 
 package body Mutime.Info
 with
-   Refined_State => (Valid => State_Valid, State => Time_Info)
+   Refined_State => (State => Time_Info)
 is
 
    package Cspecs renames Libmutime_Component.Channels;
@@ -100,11 +100,13 @@ is
 
    -------------------------------------------------------------------------
 
-   procedure Update_Validity
+   function Is_Valid return Boolean
+   with
+      Refined_Global => (Input => Time_Info)
    is
       Time : constant Time_Info_Type := Time_Info;
    begin
-      State_Valid := Time.TSC_Time_Base /= 0;
-   end Update_Validity;
+      return Valid (TI => Time);
+   end Is_Valid;
 
 end Mutime.Info;

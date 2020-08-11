@@ -64,8 +64,8 @@ with
                          Mucontrol.Command.Instance.State, Startup.State),
               In_Out => (Devices.RTC.State, Mudm.Client.State,
                          Devices.UART8250.State, Exit_Handlers.RDTSC.State,
-                         Mutime.Info.Valid, Subject_Info.State,
-                         SK.Interrupt_Tables.State, X86_64.State),
+                         Subject_Info.State, SK.Interrupt_Tables.State,
+                         X86_64.State),
               Output => Debuglog.Client.State)
 is
    use type SK.Word16;
