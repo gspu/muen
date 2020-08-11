@@ -63,16 +63,16 @@ is
    --  Calculate current timestamp using the information stored in the time
    --  info record and the specified CPU ticks. The procedure returns the
    --  timestamp and the calculated correction to the time base in
-   --  microseconds.
+   --  microseconds if Success is True.
    procedure Get_Current_Time
      (Schedule_Ticks :     Integer_62;
       Correction     : out Integer_63;
-      Timestamp      : out Timestamp_Type)
+      Timestamp      : out Timestamp_Type;
+      Success        : out Boolean)
    with
-      Global  => (Proof_In => Valid,
-                  Input    => State),
-      Depends => ((Correction, Timestamp) => (Schedule_Ticks, State)),
-      Pre     => Is_Valid;
+      Global  => (Input => State),
+      Depends => ((Correction, Timestamp) => (Schedule_Ticks, State),
+                   Success                => State);
 
 private
 
@@ -99,7 +99,8 @@ private
       Correction     : out Integer_63;
       Timestamp      : out Timestamp_Type)
    with
-      Depends => ((Correction, Timestamp) => (Schedule_Ticks, TI));
+      Depends => ((Correction, Timestamp) => (Schedule_Ticks, TI)),
+      Pre     => Valid (TI => TI);
 
    State_Valid : Boolean := False
    with
